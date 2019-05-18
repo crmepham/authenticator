@@ -14,7 +14,9 @@ An authentication server.
    
    3.4. [Delete a system user](#34)
    
-   3.5. [Register an application](#35)
+   3.5. [List system users](#35)
+   
+   3.6. [Register an application](#36)
 
 <a name="1"/>
 
@@ -67,6 +69,7 @@ Response
   "email": "user@email.com",
   "active": true,
   "deleted": false,
+  "api": true,
   "created": "2018-11-07 16:59:06",
   "created_by": "temp",
   "last_updated": "2018-11-07 16:59:06",
@@ -92,6 +95,7 @@ Response
   "email": "user@email.com",
   "active": true,
   "deleted": false,
+  "api": true,
   "created": "2018-11-07 16:59:06",
   "created_by": "system",
   "last_updated": "2018-11-07 16:59:06",
@@ -111,11 +115,11 @@ PUT /system/user/{id}
 Payload
 ```json
 {
-  "id": 2,
   "username": "user",
-  "password": "changed",
+  "password": "password",
   "email": "user@email.com",
-  "active": true
+  "active": true,
+  "deleted": false
 }
 ```
 
@@ -128,6 +132,7 @@ Response
   "email": "user@email.com",
   "active": true,
   "deleted": false,
+  "api": true,
   "created": "2018-11-07 16:59:06",
   "created_by": "temp",
   "last_updated": "2018-11-07 16:59:06",
@@ -150,6 +155,47 @@ Response
 ```
 
 <a name="35"/>
+
+## List system users
+
+Endpoint
+```text
+GET /system/users
+```
+
+Response
+```json
+[
+    {
+      "id": 1,
+      "username": "user1",
+      "password": "password",
+      "email": "user1@email.com",
+      "active": true,
+      "deleted": false,
+      "api": true,
+      "created": "2018-11-07 16:59:06",
+      "created_by": "temp",
+      "last_updated": "2018-11-07 16:59:06",
+      "last_updated_by": "user"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "password": "password",
+      "email": "user2@email.com",
+      "active": true,
+      "deleted": false,
+      "api": true,
+      "created": "2018-11-07 16:59:06",
+      "created_by": "temp",
+      "last_updated": "2018-11-07 16:59:06",
+      "last_updated_by": "user"
+    }
+]
+```
+
+<a name="36"/>
 
 ### Register an application
 
