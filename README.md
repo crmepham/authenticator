@@ -10,9 +10,11 @@ An authentication server.
    
    3.2. [Get a system user](#32)
    
-   3.3. [Delete a system user](#32)
+   3.3. [Update a system user](#33)
    
-   3.4. [Register an application](#33)
+   3.4. [Delete a system user](#34)
+   
+   3.5. [Register an application](#35)
 
 <a name="1"/>
 
@@ -44,7 +46,7 @@ replace the temporary `temp` user that is automatically created when the applica
 
 Endpoint
 ```text
-POST /admin/user/create
+POST /system/user/create
 ```
 
 Payload
@@ -52,7 +54,6 @@ Payload
 {
   "username": "user",
   "password": "password",
-  "role": "admin",
   "email": "user@email.com"
 }
 ```
@@ -63,7 +64,6 @@ Response
   "id": 2,
   "username": "user",
   "password": "password",
-  "role": "admin",
   "email": "user@email.com",
   "active": true,
   "deleted": false,
@@ -73,13 +73,14 @@ Response
   "last_updated_by": "temp"
 }
 ```
+
 <a name="32"/>
 
 ### Get a system user
 
 Endpoint
 ```text
-GET /admin/user/{id}
+GET /system/user/{id}
 ```
 
 Response
@@ -88,7 +89,6 @@ Response
   "id": 1,
   "username": "temp",
   "password": "password",
-  "role": "admin",
   "email": "user@email.com",
   "active": true,
   "deleted": false,
@@ -101,11 +101,47 @@ Response
 
 <a name="33"/>
 
+### Update a system user
+
+Endpoint
+```text
+PUT /system/user/{id}
+```
+
+Payload
+```json
+{
+  "id": 2,
+  "username": "user",
+  "password": "changed",
+  "email": "user@email.com",
+  "active": true
+}
+```
+
+Response
+```json
+{
+  "id": 2,
+  "username": "user",
+  "password": "changed",
+  "email": "user@email.com",
+  "active": true,
+  "deleted": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="34"/>
+
 ### Delete a system user
 
 Endpoint
 ```text
-DELETE /admin/user/{id}
+DELETE /system/user/{id}
 ```
 
 Response
@@ -113,7 +149,7 @@ Response
 200 OK
 ```
 
-<a name="34"/>
+<a name="35"/>
 
 ### Register an application
 
