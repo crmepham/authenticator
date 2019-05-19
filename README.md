@@ -4,7 +4,7 @@ An authentication server.
 ## Table of Contents  
 1. [Technologies](#1)  
 2. [Authentication](#2)  
-3. [API](#3)
+3. [System API](#3)
 
    3.1. [Create a system user](#31)
    
@@ -16,7 +16,9 @@ An authentication server.
    
    3.5. [List system users](#35)
    
-   3.6. [Register an application](#36)
+4. [Application API](#4)
+
+   4.1. [Register an application](#41)
 
 <a name="1"/>
 
@@ -32,10 +34,12 @@ An authentication server.
 
 <a name="3"/>
 
-## API
-This application exposes a restful api that you can use to interface with it. All requests must be 
+## System API
+This application exposes a restful API that you can use to interface with it. All requests must be 
 authenticated by including the HTTP Basic header `Authentication: bearer 1231ewqw...`. The bearer token is
 the username and password separated by a colon, base 64 encoded.
+
+The system API can be used to manage the users that can be authorized to use the application API.
 
 When the application is started a temporary user is available with the username `temp` and password `temp`. 
 Use this temporary login to create your own user account, after which you should delete the `temp` user.
@@ -195,7 +199,14 @@ Response
 ]
 ```
 
-<a name="36"/>
+<a name="4"/>
+
+## Application API
+The application API can be used to manage the applications that will be using this service to authenticate its users.
+Once an application has been registered, users belonging to that application can then be managed within the context of
+that application.
+
+<a name="41"/>
 
 ### Register an application
 
