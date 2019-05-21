@@ -16,9 +16,27 @@ An authentication server.
    
    3.5. [List system users](#35)
    
+   3.6. [List applications](#36)
+   
 4. [Application API](#4)
 
-   4.1. [Register an application](#41)
+   4.1. [Create a application](#41)
+   
+   4.2. [Get a application](#42)
+   
+   4.3. [Update a application](#43)
+   
+   4.4. [Delete a application](#44)
+   
+   4.5. [List application users](#45)
+   
+   4.6. [Create a application user](#46)
+   
+   4.7. [Get a application user](#47)
+   
+   4.8. [Update a application user](#48)
+   
+   4.9. [Delete a application user](#49)
 
 <a name="1"/>
 
@@ -70,6 +88,7 @@ Response
   "id": 2,
   "username": "user",
   "password": "password",
+  "application_id": 0,
   "email": "user@email.com",
   "active": true,
   "deleted": false,
@@ -96,6 +115,7 @@ Response
   "id": 1,
   "username": "temp",
   "password": "password",
+  "application_id": 0,
   "email": "user@email.com",
   "active": true,
   "deleted": false,
@@ -121,9 +141,9 @@ Payload
 {
   "username": "user",
   "password": "password",
+  "application_id": 0,
   "email": "user@email.com",
-  "active": true,
-  "deleted": false
+  "active": true
 }
 ```
 
@@ -133,6 +153,7 @@ Response
   "id": 2,
   "username": "user",
   "password": "changed",
+  "application_id": 0,
   "email": "user@email.com",
   "active": true,
   "deleted": false,
@@ -175,6 +196,7 @@ Response
       "username": "user1",
       "password": "password",
       "email": "user1@email.com",
+      "application_id": 0,
       "active": true,
       "deleted": false,
       "api": true,
@@ -188,6 +210,7 @@ Response
       "username": "user2",
       "password": "password",
       "email": "user2@email.com",
+      "application_id": 0,
       "active": true,
       "deleted": false,
       "api": true,
@@ -196,6 +219,45 @@ Response
       "last_updated": "2018-11-07 16:59:06",
       "last_updated_by": "user"
     }
+]
+```
+
+<a name="35"/>
+
+## List applications
+
+Endpoint
+```text
+GET /system/applications
+```
+
+Response
+```json
+[
+  {
+    "id": "1",
+    "name": "example",
+    "description": "description",
+    "url": "https://example.com/",
+    "active": true,
+    "deleted": false,
+    "created": "2018-11-07 16:59:06",
+    "created_by": "user1",
+    "last_updated": "2018-11-07 16:59:06",
+    "last_updated_by": "user1"
+  },
+  {
+    "id": "2",
+    "name": "another",
+    "description": "description",
+    "url": "https://another.com/",
+    "active": true,
+    "deleted": false,
+    "created": "2018-11-07 16:59:06",
+    "created_by": "user1",
+    "last_updated": "2018-11-07 16:59:06",
+    "last_updated_by": "user1"
+  }
 ]
 ```
 
@@ -208,7 +270,7 @@ that application.
 
 <a name="41"/>
 
-### Register an application
+### Create a application
 
 Endpoint
 ```text
@@ -238,4 +300,234 @@ Response
   "last_updated": "2018-11-07 16:59:06",
   "last_updated_by": "user1"
 }
+```
+
+<a name="42"/>
+
+### Get a application
+
+Endpoint
+```text
+GET /application/{id}
+```
+
+Response
+```json
+{
+  "id": "1",
+  "name": "example",
+  "description": "description",
+  "url": "https://example.com/",
+  "active": true,
+  "deleted": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "user1",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user1"
+}
+```
+
+<a name="43"/>
+
+### Update a application
+
+Endpoint
+```text
+PUT /application/{id}
+```
+
+Payload
+```json
+{
+  "name": "changed",
+  "url": "https://changed.com/"
+}
+```
+
+Response
+```json
+{
+  "id": "1",
+  "name": "changed",
+  "description": "description",
+  "url": "https://changed.com/",
+  "active": true,
+  "deleted": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "user1",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user1"
+}
+```
+
+<a name="44"/>
+
+### Delete a application
+
+Endpoint
+```text
+DELETE /application/{id}
+```
+
+Response
+```text
+200 OK
+```
+
+<a name="45"/>
+
+### List application users
+
+Endpoint
+```text
+GET /application/users/{id}
+```
+
+Response
+```json
+[
+    {
+      "id": 1,
+      "username": "user1",
+      "password": "password",
+      "email": "user1@email.com",
+      "application_id": 1,
+      "active": true,
+      "deleted": false,
+      "api": false,
+      "created": "2018-11-07 16:59:06",
+      "created_by": "temp",
+      "last_updated": "2018-11-07 16:59:06",
+      "last_updated_by": "user"
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "password": "password",
+      "email": "user2@email.com",
+      "application_id": 1,
+      "active": true,
+      "deleted": false,
+      "api": false,
+      "created": "2018-11-07 16:59:06",
+      "created_by": "temp",
+      "last_updated": "2018-11-07 16:59:06",
+      "last_updated_by": "user"
+    }
+]
+```
+
+<a name="46"/>
+
+### Create a application user
+
+Endpoint
+```text
+POST /user
+```
+
+Payload
+```json
+{
+  "username": "user",
+  "password": "password",
+  "email": "user@email.com",
+  "application_id": 1
+}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "email": "user@email.com",
+  "application_id": 1,
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="47"/>
+
+### Get a application user
+
+Endpoint
+```text
+GET /user/{id}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="48"/>
+
+### Update a application user
+
+Endpoint
+```text
+PUT /user/{id}
+```
+
+Payload
+```json
+{
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "active": true
+}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="49"/>
+
+### Delete a application user
+
+```text
+DELETE /user/{id}
+```
+
+Response
+```text
+200 OK
 ```
