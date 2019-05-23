@@ -5,38 +5,30 @@ An authentication server.
 1. [Technologies](#1)  
 2. [Authentication](#2)  
 3. [System API](#3)
-
-   3.1. [Create a system user](#31)
    
-   3.2. [Get a system user](#32)
+   3.1. [List system users](#32)
    
-   3.3. [Update a system user](#33)
+   3.2. [List applications](#33)
    
-   3.4. [Delete a system user](#34)
-   
-   3.5. [List system users](#35)
-   
-   3.6. [List applications](#36)
+   3.3. [Create a application](#34)
    
 4. [Application API](#4)
 
-   4.1. [Create a application](#41)
+   4.1. [Create a user](#41)
    
-   4.2. [Get a application](#42)
+   4.2. [Get a user](#42)
    
-   4.3. [Update a application](#43)
+   4.3. [Update a user](#43)
    
-   4.4. [Delete a application](#44)
+   4.4. [Delete a user](#44)
    
-   4.5. [List application users](#45)
+   4.6. [Get a application](#46)
    
-   4.6. [Create a application user](#46)
+   4.7. [Update a application](#47)
    
-   4.7. [Get a application user](#47)
+   4.8. [Delete a application](#48)
    
-   4.8. [Update a application user](#48)
-   
-   4.9. [Delete a application user](#49)
+   4.9. [List application users](#49)
 
 <a name="1"/>
 
@@ -64,123 +56,6 @@ Use this temporary login to create your own user account, after which you should
 
 <a name="31"/>
 
-### Create a system user
-A system user is a user that can configure the application. At least one system user should be created to
-replace the temporary `temp` user that is automatically created when the application is first started.
-
-Endpoint
-```text
-POST /system/user/create
-```
-
-Payload
-```json
-{
-  "username": "user",
-  "password": "password",
-  "email": "user@email.com"
-}
-```
-
-Response
-```json
-{
-  "id": 2,
-  "username": "user",
-  "password": "password",
-  "application_id": 0,
-  "email": "user@email.com",
-  "active": true,
-  "deleted": false,
-  "api": true,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "temp",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "temp"
-}
-```
-
-<a name="32"/>
-
-### Get a system user
-
-Endpoint
-```text
-GET /system/user/{id}
-```
-
-Response
-```json
-{
-  "id": 1,
-  "username": "temp",
-  "password": "password",
-  "application_id": 0,
-  "email": "user@email.com",
-  "active": true,
-  "deleted": false,
-  "api": true,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "system",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "system"
-}
-```
-
-<a name="33"/>
-
-### Update a system user
-
-Endpoint
-```text
-PUT /system/user/{id}
-```
-
-Payload
-```json
-{
-  "username": "user",
-  "password": "password",
-  "application_id": 0,
-  "email": "user@email.com",
-  "active": true
-}
-```
-
-Response
-```json
-{
-  "id": 2,
-  "username": "user",
-  "password": "changed",
-  "application_id": 0,
-  "email": "user@email.com",
-  "active": true,
-  "deleted": false,
-  "api": true,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "temp",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "user"
-}
-```
-
-<a name="34"/>
-
-### Delete a system user
-
-Endpoint
-```text
-DELETE /system/user/{id}
-```
-
-Response
-```text
-200 OK
-```
-
-<a name="35"/>
-
 ## List system users
 
 Endpoint
@@ -200,6 +75,7 @@ Response
       "active": true,
       "deleted": false,
       "api": true,
+      "admin": false,
       "created": "2018-11-07 16:59:06",
       "created_by": "temp",
       "last_updated": "2018-11-07 16:59:06",
@@ -214,6 +90,7 @@ Response
       "active": true,
       "deleted": false,
       "api": true,
+      "admin": false,
       "created": "2018-11-07 16:59:06",
       "created_by": "temp",
       "last_updated": "2018-11-07 16:59:06",
@@ -222,7 +99,7 @@ Response
 ]
 ```
 
-<a name="35"/>
+<a name="32"/>
 
 ## List applications
 
@@ -261,16 +138,20 @@ Response
 ]
 ```
 
-<a name="4"/>
-
-## Application API
-The application API can be used to manage the applications that will be using this service to authenticate its users.
-Once an application has been registered, users belonging to that application can then be managed within the context of
-that application.
-
-<a name="41"/>
+<a name="33"/>
 
 ### Create a application
+
+Rules
+1. Only API users can create applications.
+
+Parameters
+
+| Name        | Type           | Required  |
+| ------------- |:-------------:| -----:|
+| name      | string | yes | |
+| description     | string      |   yes |
+| email | string      |    yes |
 
 Endpoint
 ```text
@@ -302,7 +183,153 @@ Response
 }
 ```
 
+<a name="4"/>
+
+## Application API
+The application API can be used to manage the applications that will be using this service to authenticate its users.
+Once an application has been registered, users belonging to that application can then be managed within the context of
+that application.
+
+<a name="41"/>
+
+### Create a user
+
+Rules
+1. Only admins can create other admins.
+2. Only API users and admins can create other API users.
+
+Parameters
+
+| Name        | Type           | Required  | Default |
+| ------------- |:-------------:| -----:|  -----:|
+| username      | string | yes | |
+| password     | string      |   yes | |
+| email | string      |    yes | |
+| application_id | int      |    yes | |
+| api | bool      |    no | false|
+| admin | bool      |    no | false|
+| active | bool      |    no | false|
+
+Endpoint
+```text
+POST /user
+```
+
+Payload
+```json
+{
+  "username": "user",
+  "password": "password",
+  "email": "user@email.com",
+  "api": false,
+  "admin": false,
+  "active": true,
+  "application_id": 1
+}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "email": "user@email.com",
+  "application_id": 1,
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "admin": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
 <a name="42"/>
+
+### Get a user
+
+Endpoint
+```text
+GET /user/{id}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "admin": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="43"/>
+
+### Update a user
+
+Endpoint
+```text
+PUT /user/{id}
+```
+
+Payload
+```json
+{
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "api": false,
+  "admin": false,
+  "active": true
+}
+```
+
+Response
+```json
+{
+  "id": 1,
+  "username": "user",
+  "password": "password",
+  "application_id": 1,
+  "email": "user@email.com",
+  "active": true,
+  "deleted": false,
+  "api": false,
+  "admin": false,
+  "created": "2018-11-07 16:59:06",
+  "created_by": "temp",
+  "last_updated": "2018-11-07 16:59:06",
+  "last_updated_by": "user"
+}
+```
+
+<a name="44"/>
+
+### Delete a user
+
+```text
+DELETE /user/{id}
+```
+
+Response
+```text
+200 OK
+```
+
+<a name="46"/>
 
 ### Get a application
 
@@ -327,7 +354,7 @@ Response
 }
 ```
 
-<a name="43"/>
+<a name="47"/>
 
 ### Update a application
 
@@ -340,7 +367,9 @@ Payload
 ```json
 {
   "name": "changed",
-  "url": "https://changed.com/"
+  "description": "description",
+  "url": "https://changed.com/",
+  "active": true
 }
 ```
 
@@ -360,7 +389,7 @@ Response
 }
 ```
 
-<a name="44"/>
+<a name="48"/>
 
 ### Delete a application
 
@@ -374,7 +403,7 @@ Response
 200 OK
 ```
 
-<a name="45"/>
+<a name="47"/>
 
 ### List application users
 
@@ -395,6 +424,7 @@ Response
       "active": true,
       "deleted": false,
       "api": false,
+      "admin": false,
       "created": "2018-11-07 16:59:06",
       "created_by": "temp",
       "last_updated": "2018-11-07 16:59:06",
@@ -409,125 +439,11 @@ Response
       "active": true,
       "deleted": false,
       "api": false,
+      "admin": false,
       "created": "2018-11-07 16:59:06",
       "created_by": "temp",
       "last_updated": "2018-11-07 16:59:06",
       "last_updated_by": "user"
     }
 ]
-```
-
-<a name="46"/>
-
-### Create a application user
-
-Endpoint
-```text
-POST /user
-```
-
-Payload
-```json
-{
-  "username": "user",
-  "password": "password",
-  "email": "user@email.com",
-  "application_id": 1
-}
-```
-
-Response
-```json
-{
-  "id": 1,
-  "username": "user",
-  "password": "password",
-  "email": "user@email.com",
-  "application_id": 1,
-  "active": true,
-  "deleted": false,
-  "api": false,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "temp",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "user"
-}
-```
-
-<a name="47"/>
-
-### Get a application user
-
-Endpoint
-```text
-GET /user/{id}
-```
-
-Response
-```json
-{
-  "id": 1,
-  "username": "user",
-  "password": "password",
-  "application_id": 1,
-  "email": "user@email.com",
-  "active": true,
-  "deleted": false,
-  "api": false,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "temp",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "user"
-}
-```
-
-<a name="48"/>
-
-### Update a application user
-
-Endpoint
-```text
-PUT /user/{id}
-```
-
-Payload
-```json
-{
-  "username": "user",
-  "password": "password",
-  "application_id": 1,
-  "email": "user@email.com",
-  "active": true
-}
-```
-
-Response
-```json
-{
-  "id": 1,
-  "username": "user",
-  "password": "password",
-  "application_id": 1,
-  "email": "user@email.com",
-  "active": true,
-  "deleted": false,
-  "api": false,
-  "created": "2018-11-07 16:59:06",
-  "created_by": "temp",
-  "last_updated": "2018-11-07 16:59:06",
-  "last_updated_by": "user"
-}
-```
-
-<a name="49"/>
-
-### Delete a application user
-
-```text
-DELETE /user/{id}
-```
-
-Response
-```text
-200 OK
 ```
