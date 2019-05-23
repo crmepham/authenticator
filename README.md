@@ -6,11 +6,11 @@ An authentication server.
 2. [Authentication](#2)  
 3. [System API](#3)
    
-   3.1. [List system users](#32)
+   3.1. [List system users](#31)
    
-   3.2. [List applications](#33)
+   3.2. [List applications](#32)
    
-   3.3. [Create a application](#34)
+   3.3. [Create a application](#33)
    
 4. [Application API](#4)
 
@@ -99,7 +99,7 @@ Response
 ]
 ```
 
-<a name="33"/>
+<a name="32"/>
 
 ## List applications
 
@@ -138,7 +138,7 @@ Response
 ]
 ```
 
-<a name="34"/>
+<a name="33"/>
 
 ### Create a application
 
