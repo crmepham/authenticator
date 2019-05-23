@@ -99,7 +99,7 @@ Response
 ]
 ```
 
-<a name="32"/>
+<a name="33"/>
 
 ## List applications
 
@@ -138,7 +138,7 @@ Response
 ]
 ```
 
-<a name="33"/>
+<a name="34"/>
 
 ### Create a application
 
@@ -403,7 +403,7 @@ Response
 200 OK
 ```
 
-<a name="47"/>
+<a name="49"/>
 
 ### List application users
 
