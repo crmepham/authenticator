@@ -8,16 +8,15 @@ import (
 	"strconv"
 )
 
-const (
-	application, system = "application", "system"
-)
-
 func (s *server) login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var user User
 		err := decoder.Decode(&user)
-		check(err)
+		if err != nil {
+			fail(w, "Invalid credentials.", 401)
+			return
+		}
 
 		_, err = getByUsernameAndPassword(user.Username, user.Password, false, s)
 		if err != nil {

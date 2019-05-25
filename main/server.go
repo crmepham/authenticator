@@ -54,7 +54,7 @@ func (s *server) registerMiddleWare() {
 }
 
 func (s *server) loadConfig() {
-	file, err := os.Open("../" + a)
+	file, err := os.Open(a)
 	check(err)
 	defer file.Close()
 
