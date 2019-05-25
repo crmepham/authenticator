@@ -12,6 +12,22 @@ const (
 	application, system = "application", "system"
 )
 
+func (s *server) login() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		decoder := json.NewDecoder(r.Body)
+		var user User
+		err := decoder.Decode(&user)
+		check(err)
+
+		_, err = getByUsernameAndPassword(user.Username, user.Password, false, s)
+		if err != nil {
+			fail(w, "Invalid credentials.", 401)
+		} else {
+			fail(w, "Success.", 200)
+		}
+	}
+}
+
 func (s *server) createUser() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)

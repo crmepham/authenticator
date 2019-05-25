@@ -4,31 +4,31 @@ An authentication server.
 ## Table of Contents  
 1. [Technologies](#1)  
 2. [Authentication](#2)  
-3. [System API](#3)
+3. [API](#3)
    
    3.1. [List system users](#31)
    
    3.2. [List applications](#32)
    
    3.3. [Create a application](#33)
-   
-4. [Application API](#4)
 
-   4.1. [Create a user](#41)
+   3.4. [Create a user](#34)
    
-   4.2. [Get a user](#42)
+   3.5. [Get a user](#35)
    
-   4.3. [Update a user](#43)
+   3.6. [Update a user](#36)
    
-   4.4. [Delete a user](#44)
+   3.7. [Delete a user](#37)
    
-   4.6. [Get a application](#46)
+   3.8. [Get a application](#38)
    
-   4.7. [Update a application](#47)
+   3.9. [Update a application](#39)
    
-   4.8. [Delete a application](#48)
+   4.0. [Delete a application](#40)
    
-   4.9. [List application users](#49)
+   4.1. [List application users](#41)
+   
+   4.2. [Login](#42)
 
 <a name="1"/>
 
@@ -44,12 +44,10 @@ An authentication server.
 
 <a name="3"/>
 
-## System API
+## API
 This application exposes a restful API that you can use to interface with it. All requests must be 
 authenticated by including the HTTP Basic header `Authentication: bearer 1231ewqw...`. The bearer token is
 the username and password separated by a colon, base 64 encoded.
-
-The system API can be used to manage the users that can be authorized to use the application API.
 
 When the application is started a temporary user is available with the username `temp` and password `temp`. 
 Use this temporary login to create your own user account, after which you should delete the `temp` user.
@@ -183,14 +181,7 @@ Response
 }
 ```
 
-<a name="4"/>
-
-## Application API
-The application API can be used to manage the applications that will be using this service to authenticate its users.
-Once an application has been registered, users belonging to that application can then be managed within the context of
-that application.
-
-<a name="41"/>
+<a name="34"/>
 
 ### Create a user
 
@@ -247,7 +238,7 @@ Response
 }
 ```
 
-<a name="42"/>
+<a name="35"/>
 
 ### Get a user
 
@@ -275,7 +266,7 @@ Response
 }
 ```
 
-<a name="43"/>
+<a name="36"/>
 
 ### Update a user
 
@@ -316,7 +307,7 @@ Response
 }
 ```
 
-<a name="44"/>
+<a name="37"/>
 
 ### Delete a user
 
@@ -329,7 +320,7 @@ Response
 200 OK
 ```
 
-<a name="46"/>
+<a name="38"/>
 
 ### Get a application
 
@@ -354,7 +345,7 @@ Response
 }
 ```
 
-<a name="47"/>
+<a name="39"/>
 
 ### Update a application
 
@@ -389,7 +380,7 @@ Response
 }
 ```
 
-<a name="48"/>
+<a name="40"/>
 
 ### Delete a application
 
@@ -403,7 +394,7 @@ Response
 200 OK
 ```
 
-<a name="49"/>
+<a name="41"/>
 
 ### List application users
 
@@ -446,4 +437,26 @@ Response
       "last_updated_by": "user"
     }
 ]
+```
+
+<a name="42"/>
+
+### Login
+
+Endpoint
+```text
+POST /login
+```
+
+Payload
+```json
+{
+  "username": "username",
+  "password": "password"
+}
+```
+
+Response
+```text
+200 OK
 ```

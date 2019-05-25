@@ -44,6 +44,7 @@ func (s *server) registerHandlers() {
 	s.router.HandleFunc(p+u+id, s.getUser()).Methods("GET")
 	s.router.HandleFunc(p+u+id, s.deleteUser()).Methods("DELETE")
 	s.router.HandleFunc(p+u+id, s.updateUser()).Methods("PUT")
+	s.router.HandleFunc(p+"login", s.login()).Methods("POST")
 }
 
 func (s *server) registerMiddleWare() {
